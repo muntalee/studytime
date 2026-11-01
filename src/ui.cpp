@@ -65,8 +65,8 @@ void TimerUi::Run() {
 
   auto component = CatchEvent(Renderer([&] {
     timer_.Update();
-    const int panel_width = std::max(20, screen_.dimx() / 2);
-    const int panel_height = std::max(8, screen_.dimy() / 2);
+    const int panel_width = std::max(20, screen_.dimx() * 3 / 5);
+    const int panel_height = std::max(8, screen_.dimy() * 3 / 5);
     auto view = vbox({
         filler(),
         TimerPanel(timer_, panel_width, panel_height) | center,

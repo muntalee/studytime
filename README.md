@@ -1,4 +1,4 @@
-# Studytime
+# `studytime`
 
 ![Studytime demo](assets/demo.gif)
 

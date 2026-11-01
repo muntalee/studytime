@@ -1,14 +1,12 @@
 # Studytime
 
+![Studytime demo](assets/demo.gif)
+
 A small cross-platform Pomodoro timer for the terminal, built with C++ and [FTXUI](https://github.com/ArthurSonzogni/FTXUI).
 
 The timer renders a large centered rounded panel with a horizontal fill that
 advances from left to right inside its border as time passes. The countdown stays centered in the panel,
 and settings are stored in the platform's user configuration directory.
-
-## Demo
-
-![Studytime demo](assets/demo.gif)
 
 ## Build
 

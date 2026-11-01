@@ -1,22 +1,21 @@
 cmake_minimum_required(VERSION 3.16)
-project(game VERSION 1.0)
+project(studytime VERSION 0.1.0 LANGUAGES CXX)
 
-# output file same name as project name
-set(OUT ${CMAKE_PROJECT_NAME})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# search for all files in src folder
-file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
+file(GLOB SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/*.cpp")
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-# add files to executable
-add_executable(${OUT} ${SOURCES})
+add_subdirectory(extern/ftxui)
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    ftxui::component
+    ftxui::dom
+    ftxui::screen
+)
 
-# add external libraries
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/glfw)
-
-# include directories
-target_include_directories(${OUT} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
-# link libraries
-find_package(OpenGL REQUIRED)
-
-target_link_libraries(${OUT} PRIVATE glfw OpenGL::GL)
+if (WIN32)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()

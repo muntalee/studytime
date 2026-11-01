@@ -1,125 +1,55 @@
-# Simple C/C++ Project Setup
+# Studytime
 
-This is a minimal cross-platform C++ project that currently uses **GLFW** and **OpenGL**, built with **CMake**.
+A small cross-platform Pomodoro timer for the terminal, built with C++ and [FTXUI](https://github.com/ArthurSonzogni/FTXUI).
 
-A `Makefile` is included to make building and running the project consistent across Linux, macOS, and Windows.
+The timer renders a large centered rounded panel with a horizontal fill that
+advances from left to right inside its border as time passes. The countdown stays centered in the panel,
+and settings are stored in the platform's user configuration directory.
 
-## Dependencies
+## Demo
 
-* **CMake ≥ 3.16**
-* **A C++17 (or newer) compiler**
-  * GCC or Clang on Linux
-  * Clang (via Xcode tools) on macOS
-  * MSVC (Visual Studio) or MinGW on Windows
-* **Ninja** (build tool)
+![Studytime demo](assets/demo.gif)
 
-## Download
+## Build
 
-```
-git clone --recurse-submodules https://github.com/muntalee/sample-c-cpp-project
-```
-
-## Install
-
-* **Ubuntu / Debian**
-
-  ```bash
-  sudo apt update
-  sudo apt install build-essential cmake ninja-build libgl1-mesa-dev xorg-dev
-  ```
-
-* **Fedora**
-
-  ```bash
-  sudo dnf install gcc-c++ cmake ninja-build mesa-libGL-devel libX11-devel libXrandr-devel libXcursor-devel libXi-devel
-  ```
-
-* **macOS**
-
-  ```bash
-  brew install cmake ninja
-  ```
-
-  (OpenGL and Clang come with macOS.)
-
-* **Windows**
-
-  * **Option 1: Visual Studio (MSVC toolchain)**
-
-    * Install [Visual Studio Community](https://visualstudio.microsoft.com/)
-      (Choose **Desktop development with C++** workload.)
-    * Install [Ninja](https://ninja-build.org/) or with Winget:
-
-      ```powershell
-      winget install Ninja-build.Ninja
-      ```
-
-  * **Option 2: Scoop + MinGW (GCC toolchain)**
-
-    * Install [Scoop](https://scoop.sh/) (a Windows package manager).
-    * Then all other dependencies
-
-      ```powershell
-      scoop install mingw
-      scoop install ninja cmake
-      ```
-
-## Build & Run
-
-The `Makefile` comes bundled with preset commands you may use to compile your project.
+Clone with the submodule and build with CMake/Ninja:
 
 ```bash
-make build     # creates build
-make compile   # compiles the build
-make run       # build and run
-make clean     # cleans up build files / executable
+git clone --recurse-submodules https://github.com/muntalee/studytime
+cd studytime
+make compile
+make run
 ```
 
-## Customization
-
-* By default, the project builds an executable named `game`.
-* To change this:
-
-  1. Update the variable `EXE = game` in the `Makefile`.
-  2. Change `game` in the `project(game VERSION 1.0)` line in `CMakeLists.txt`.
-
-## Adding more libraries
-
-### Option 1: Drop-in
-
-* Place the library source under `extern/`
-* In `CMakeLists.txt`:
-
-  ```cmake
-  add_subdirectory(extern/mylib)
-  target_link_libraries(${OUT} PRIVATE mylib)
-  target_include_directories(${OUT} PRIVATE extern/mylib/include)
-  ```
-
-### Option 2: Git Submodules
-
-If the library is hosted on GitHub or elsewhere, you can add it as a `submodule`:
+Or use CMake directly:
 
 ```bash
-git submodule add https://github.com/some/library.git extern/library
-git submodule update --init --recursive
+cmake -S . -B build -G Ninja
+cmake --build build
+./build/studytime
 ```
 
-Then link it in `CMakeLists.txt`:
+## Controls
 
-```cmake
-add_subdirectory(extern/library)
-target_link_libraries(${OUT} PRIVATE library)
-```
+| Key | Action |
+|---|---|
+| `Space` | Start or pause |
+| `R` | Reset the current phase |
+| `Ctrl+P` | Open settings |
+| `Q` | Quit |
 
-When cloning this repo later, don’t forget to pull submodules too:
 
-```bash
-git clone --recurse-submodules https://github.com/your/repo.git
-```
+Inside settings, use the arrow keys to select and change values, `Enter` to
+save, or `Escape` to cancel. The solid timer panel can be disabled, and each
+phase has an RGB color editor. The defaults are red for focus, green for short
+breaks, and blue for long breaks. This RGB editor is used instead of a
+mouse-based color picker because it works consistently across terminals and
+Wayland sessions.
 
-Or if you forgot:
+## Notifications
 
-```bash
-git submodule update --init --recursive
-```
+When a phase ends, Studytime emits the terminal bell and sends a desktop
+notification. On Linux it uses `notify-send`, which works on Wayland/Sway
+through the desktop notification D-Bus service. Install and run a notification
+daemon such as `mako` or `swaync` if notifications are not visible. The
+terminal bell still works without one.

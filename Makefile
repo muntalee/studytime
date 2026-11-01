@@ -1,15 +1,14 @@
 BUILD_DIR = build
-EXE = game
+EXE = studytime
 
-# detect OS
 ifeq ($(OS),Windows_NT)
-    RM = rmdir /S /Q
-    EXE_EXT = .exe
-    RUN = $(BUILD_DIR)\$(EXE)$(EXE_EXT)
+  RM = rmdir /S /Q
+  EXE_EXT = .exe
+  RUN = $(BUILD_DIR)\$(EXE)$(EXE_EXT)
 else
-    RM = rm -rf
-    EXE_EXT =
-    RUN = ./$(BUILD_DIR)/$(EXE)$(EXE_EXT)
+  RM = rm -rf
+  EXE_EXT =
+  RUN = ./$(BUILD_DIR)/$(EXE)$(EXE_EXT)
 endif
 
 compile: build
